@@ -1,0 +1,38 @@
+from typing import Any, Text, Dict, List
+import requests,json
+import os
+from .root import app
+from .exceptions import UnitNotFound
+
+base_url = "https://maps.googleapis.com/maps/api/place/"
+base_url_photos = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="
+@app.handle(intent='search_places')
+class searchplace(request, responder):
+        url1 = "findplacefromtext/json?input="
+        url2 = "&inputtype=textquery&fields=photos,formatted_address,name,geometry,place_id&key="
+        place = _get_city(request)
+        api_key = os.environ['API_KEY']
+        url = base_url + url1 + place + url2 + str(api_key)
+        response = requests.get(url)
+        x = response.json()
+        y = x['candidates']
+        responder.reply(str(x))
+        '''
+        dispatcher.utter_message("Searching..., Found :")
+        for c in y:
+            photo_ref = c['photos'][0]['photo_reference']
+            image = base_url_photos + photo_ref + "&key=" + str(api_key)
+            img = requests.get(image)
+            dispatcher.utter_message(template="utter_image", image=img.url)
+            dispatcher.utter_message(c['formatted_address'])
+        return []
+        '''
+        
+def _get_city(request):
+    city_entity = next((e for e in request.entities if e['type'] == 'city'), None)
+
+    if city_entity:
+        return city_entity['text']
+    else:
+        # Default to San Francisco
+        return DEFAULT_LOCATION
