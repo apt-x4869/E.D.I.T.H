@@ -4,5 +4,6 @@
 from edith.root import app
 
 import edith.weather
+import edith.greeting
 
 __all__ = ['app']
