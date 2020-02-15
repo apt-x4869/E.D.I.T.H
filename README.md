@@ -15,4 +15,4 @@ Run run_bot.sh to start Bot on your local server
 $ chmod +x run_bot.sh
 $ ./run_bot.sh
 
-Note: Scripts have been tested on Kali Linus 2020.1
+Note: Scripts have been tested on Kali Linux 2020.1
